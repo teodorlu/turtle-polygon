@@ -1,7 +1,7 @@
 from turtle import *
+import math
 
 def draw_poly(polygon):
-
 	penup()
 	for line in polygon:
 		goto(line)
@@ -19,9 +19,20 @@ def draw_letter(polygons):
 def map_letter(f, letter):
 	return map(lambda poly: map(f, poly), letter)
 
-alphabet = {
-	't': [[(0, 100), (80,100)], [(40, 0), (40,100)]]	
-}
+def ellipse(rx, ry, start=0, end=360, x0=0, y0=0):
+	lines = []
+
+	# penup()
+	for part in range(start, end+1, 10):
+		theta = part/360 * 2*math.pi
+		# pendown()
+		x = x0 + rx + rx*math.cos(theta)
+		y = y0 + ry + ry*math.sin(theta)
+		# goto(x,y)
+		lines.append((x, y))
+	# penup()
+
+	return [lines]
 
 def safe_lookup_char(c):
 	if c in alphabet:
@@ -42,7 +53,9 @@ def rasterize_string(s):
 			yield line
 
 def concat(xss):
-	return sum(list(xss), [])
+	for xs in xss:
+		for x in xs:
+			yield x
 
 def translate_letter(letter, delta):
 	def translator(tup):
@@ -52,9 +65,19 @@ def translate_letter(letter, delta):
 
 	return map_letter(translator, letter)
 
+alphabet = {
+	't': [[(0, 100), (80,100)], [(40, 0), (40,100)]]	
+	, 'e': [[(0,0), (0,100), (80,100)], [(0, 50), (60, 50)], [(0,0), (80, 0)]]
+	, 'o': ellipse(40,50)
+	, 'd': concat([ellipse(50, 50, start=-90, end=90, x0=-30, y0=0), [[(20, 0), (20, 100)]]])
+	# , 'r': concat([
+
+
+	# 	])
+}
+
 def main():
 	draw_string("teodor")
-	draw_letter(safe_lookup_char('t'))
 
 	done()
 	
