@@ -1,15 +1,16 @@
 from turtle import *
 
 def draw_poly(polygon):
-	if len(polygon) < 2:
-		return()
 
 	penup()
-	goto(polygon[0])
-	pendown()
-	for i in range(1, len(polygon)):
-		goto(polygon[i])
+	for line in polygon:
+		goto(line)
+		pendown()
 	penup()
+
+def draw_string(s):
+	raster = rasterize_string(s)
+	draw_letter(raster)
 
 def draw_letter(polygons):
 	for poly in polygons:
@@ -22,8 +23,26 @@ alphabet = {
 	't': [[(0, 100), (80,100)], [(40, 0), (40,100)]]	
 }
 
+def safe_lookup_char(c):
+	if c in alphabet:
+		return alphabet[c]
+	else:
+		return []
+
+def rasterize_string(s):
+	x = 0
+	y = 0
+	dx = 100
+	polygons = []
+
+	for c in s:
+		letter = translate_letter(safe_lookup_char(c), (x, y))
+		x += 100
+		for line in letter:
+			yield line
+
 def concat(xss):
-	return sum(xss, [])
+	return sum(list(xss), [])
 
 def translate_letter(letter, delta):
 	def translator(tup):
@@ -34,10 +53,8 @@ def translate_letter(letter, delta):
 	return map_letter(translator, letter)
 
 def main():
-
-	t2 = map_letter(lambda tup: (tup[0]+200, tup[1]), t)
-	draw_letter(t)
-	draw_letter(t2)
+	draw_string("teodor")
+	draw_letter(safe_lookup_char('t'))
 
 	done()
 	
