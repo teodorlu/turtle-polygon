@@ -29,5 +29,11 @@ class TestTurtlePolygon(unittest.TestCase):
 		shifted_origin = turtle_polygon.translate_letter(origin, delta)
 		self.assert_letter_equal(expected_shifted_origin, shifted_origin)
 
+	def test_concat(self):
+		xss = [[1,2,3], [4, 5,6]]
+		ys = [1, 2, 3, 4, 5, 6]
+		for (x, y) in zip(turtle_polygon.concat(xss), ys):
+			self.assertEqual(x, y)
+
 if __name__ == '__main__':
 	unittest.main()

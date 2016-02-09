@@ -22,6 +22,9 @@ alphabet = {
 	't': [[(0, 100), (80,100)], [(40, 0), (40,100)]]	
 }
 
+def concat(xss):
+	return sum(xss, [])
+
 def translate_letter(letter, delta):
 	def translator(tup):
 		(x, y) = tup
