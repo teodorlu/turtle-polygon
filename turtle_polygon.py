@@ -68,14 +68,39 @@ alphabet = {
 	, 'l': [[(0,100), (0,0), (80,0)]]
 }
 
-def main():
-	def scale(tup):
-		factor = .2
-		x, y = tup
-		return (factor*x, factor*y)
-	raster = map_letter(scale, rasterize_string("teodor er kul"))
+def scale(tup):
+	factor = .2
+	x, y = tup
+	return (factor*x, factor*y)
 
-	draw_letter(raster)
+def italics(tup):
+	tantheta = .3
+	x, y = tup
+	return (x + y * tantheta, y)
+
+def compose(*args):
+	def g(x):
+		for f in args:
+			x = f(x)
+		return x
+	return g
+
+def translate(x, y):
+	def translate_mod(tup):
+		x0, y0 = tup
+		return (x0+x, y0+y)
+	return translate_mod
+
+def plus1(x):
+	return x + 1
+
+def main():
+	transform = compose(translate(-800, 0), scale, italics)
+
+	teodor = map_letter(transform, rasterize_string("teodor er kul"))
+	# perry = map_letter(scale, )
+
+	draw_letter(teodor)
 
 	done()
 	
